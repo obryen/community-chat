@@ -12,7 +12,7 @@ export class Room extends TimeBaseEntity {
     @Column({ type: 'varchar', nullable: false })
     name: string;
 
-    @ManyToMany(() => User, (u) => u.rooms)
+    @ManyToMany(() => User, (u) => u.rooms, { cascade: true })
     @JoinTable({
         name: 'room_users',
         joinColumn: { name: 'room_id', referencedColumnName: 'id' },
