@@ -1,6 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { Logger } from '@nestjs/common';
+import { getConfigFromEnv } from './common/dtos/configuration.dto';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,6 +14,12 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);
-  await app.listen(3000);
+  await app.listen(getConfigFromEnv().appPort, listenCallback);
 }
+function listenCallback() {
+  Logger.log(
+    `*** Application running on port [${getConfigFromEnv().appPort}] ***`,
+  );
+};
+
 bootstrap();
