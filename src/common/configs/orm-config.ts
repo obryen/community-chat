@@ -7,7 +7,6 @@ import { getConfigFromEnv } from '../dtos/configuration.dto';
  */
 export const getOrmConfiguration = (): TypeOrmModuleOptions => {
   const configuration = getConfigFromEnv();
-  console.log('configs', configuration)
   return {
     type: 'postgres',
     host: configuration.postgresHost,
