@@ -3,7 +3,7 @@ import { DataSource } from 'typeorm';
 import { config } from 'dotenv';
 import { User } from './src/chat/model/user.entity';
 import { Room } from './src/chat/model/room.entity';
-import { Message } from './src/chat/model/message.entity';
+import { RoomMessage } from './src/chat/model/message.entity';
 
 config();
 
@@ -18,7 +18,7 @@ export default new DataSource({
   entities: [
     User,
     Room,
-    Message,
+    RoomMessage,
   ],
   migrations: []
 })

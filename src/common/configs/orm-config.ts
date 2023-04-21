@@ -2,7 +2,7 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { getConfigFromEnv } from '../dtos/configuration.dto';
 import { Room } from '../../chat/model/room.entity';
 import { User } from '../../chat/model/user.entity';
-import { Message } from '../../chat/model/message.entity';
+import { RoomMessage } from '../../chat/model/message.entity';
 import { Migration } from 'typeorm';
 import { DatabaseSeed1682066463062 } from 'src/migrations/1682066463062-DatabaseSeed';
 import { SchemaSetup1682066365257 } from 'src/migrations/1682066365257-SchemaSetup';
@@ -22,7 +22,7 @@ export const getOrmConfiguration = (): TypeOrmModuleOptions => {
     database: configuration.postgresDatabaseName,
     // should be off in a production setting
     synchronize: false,
-    entities: [Room, User, Message],
+    entities: [Room, User, RoomMessage],
     migrationsTableName: 'migration',
     logging: true,
     migrationsRun: true,

@@ -1,7 +1,7 @@
 import { TimeBaseEntity } from "../../common/time-base.entity";
 import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Room } from "./room.entity";
-import { Message } from "./message.entity";
+import { RoomMessage } from "./message.entity";
 
 
 @Entity('users')
@@ -15,6 +15,6 @@ export class User extends TimeBaseEntity {
     @ManyToMany(() => Room, (r) => r.users)
     rooms: Room[];
 
-    @OneToMany(() => Message, (m) => m.user)
-    messages: Message[];
+    @OneToMany(() => RoomMessage, (m) => m.user)
+    messages: RoomMessage[];
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { Room } from './model/room.entity';
-import { Message } from './model/message.entity';
+import { RoomMessage } from './model/message.entity';
 import { User } from './model/user.entity';
 
 
@@ -13,10 +13,15 @@ export class ChatService {
         private roomRepository: Repository<Room>,
         @InjectRepository(User)
         private userRepository: Repository<User>,
-        @InjectRepository(Message)
-        private messageRepository: Repository<Message>,
+        @InjectRepository(RoomMessage)
+        private messageRepository: Repository<RoomMessage>,
         private dataSource: DataSource
     ) { }
+
+    async fetchUser(): Promise<User> {
+        const users = await this.userRepository.find();
+        return users[0];
+    }
 
     async createRoom(name: string): Promise<Room> {
         const existingRoom = await this.roomRepository.findOne({ where: { name } });
@@ -41,31 +46,29 @@ export class ChatService {
         return await this.roomRepository.save(room);
     }
 
-    async sendMessageToRoom(roomId: string, userId: string, text: string): Promise<Message> {
+    async sendMessageToRoom(roomId: string, userId: string, text: string): Promise<RoomMessage> {
         const room = await this.roomRepository.findOneOrFail({ where: { id: roomId } });
         const user = await this.userRepository.findOneOrFail({ where: { id: userId } });
         if (text.trim().length === 0) {
             throw new Error('Message text cannot be empty');
         }
 
-        const message = new Message();
+        const message = new RoomMessage();
         message.text = text;
         message.room = room;
         message.user = user;
         return await this.messageRepository.save(message);
     }
 
-    // added concurrency handling to the function using TypeORM's QueryRunner.
-    async getLatestMessagesFromRoom(roomId: string, limit: number): Promise<Message[]> {
-        const room = await this.roomRepository.findOneOrFail({ where: { id: roomId } });
+    async getLatestMessagesFromRoom(roomId: string, limit: number): Promise<RoomMessage[]> {
         const connection = this.dataSource;
         const queryRunner = connection.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
 
         try {
-            const messages = await queryRunner.manager.find(Message, {
-                where: { room: room },
+            const messages = await queryRunner.manager.find(RoomMessage, {
+                where: { roomId: roomId},
                 order: { createdAt: 'DESC' },
                 take: limit,
                 relations: ['user'],
