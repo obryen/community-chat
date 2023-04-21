@@ -1,10 +1,10 @@
 import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./user.entity";
-import { TimeBaseEntity } from "src/common/time-base.entity";
+import { TimeBaseEntity } from "../../common/time-base.entity";
 import { Message } from "./message.entity";
 
 
-@Entity('room')
+@Entity('rooms')
 export class Room extends TimeBaseEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;

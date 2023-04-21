@@ -1,9 +1,9 @@
-import { TimeBaseEntity } from "src/common/time-base.entity";
+import { TimeBaseEntity } from "../../common/time-base.entity";
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./user.entity";
 import { Room } from "./room.entity";
 
-@Entity('message')
+@Entity('messages')
 export class Message extends TimeBaseEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
