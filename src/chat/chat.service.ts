@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException, ConflictException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { Room } from './model/room.entity';
@@ -26,7 +26,7 @@ export class ChatService {
     async createRoom(name: string): Promise<Room> {
         const existingRoom = await this.roomRepository.findOne({ where: { name } });
         if (existingRoom) {
-            throw new Error('Room already exists');
+            throw new ConflictException('Room already exists');
         }
 
         const room = new Room();
@@ -40,17 +40,23 @@ export class ChatService {
         const room = await this.roomRepository.findOneOrFail({ where: { id: roomId } });
         const user = await this.userRepository.findOneOrFail({ where: { id: userId } });
         if (room.users.some(u => u.id === userId)) {
-            throw new Error('User already in room');
+            throw new ConflictException('User already in room');
         }
         room.users.push(user);
         return await this.roomRepository.save(room);
     }
 
     async sendMessageToRoom(roomId: string, userId: string, text: string): Promise<RoomMessage> {
-        const room = await this.roomRepository.findOneOrFail({ where: { id: roomId } });
-        const user = await this.userRepository.findOneOrFail({ where: { id: userId } });
+        const room = await this.roomRepository.findOne({ where: { id: roomId } });
+        if (!room) {
+            throw new NotFoundException('Room does not exist')
+        }
+        const user = await this.userRepository.findOne({ where: { id: userId } });
+        if (!user) {
+            throw new NotFoundException('User does not exist')
+        }
         if (text.trim().length === 0) {
-            throw new Error('Message text cannot be empty');
+            throw new BadRequestException('Message text cannot be empty');
         }
 
         const message = new RoomMessage();
@@ -68,7 +74,7 @@ export class ChatService {
 
         try {
             const messages = await queryRunner.manager.find(RoomMessage, {
-                where: { roomId: roomId},
+                where: { roomId: roomId },
                 order: { createdAt: 'DESC' },
                 take: limit,
                 relations: ['user'],
