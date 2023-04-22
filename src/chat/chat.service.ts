@@ -37,11 +37,11 @@ export class ChatService {
 
 
     async addUserToRoom(roomId: string, userId: string): Promise<Room> {
-        const room = await this.roomRepository.findOneOrFail({ where: { id: roomId } });
+        const room = await this.roomRepository.findOne({ where: { id: roomId } });
         if (!room) {
             throw new NotFoundException('Room does not exist')
         }
-        const user = await this.userRepository.findOneOrFail({ where: { id: userId } });
+        const user = await this.userRepository.findOne({ where: { id: userId } });
         if (!user) {
             throw new NotFoundException('User does not exist')
         }
