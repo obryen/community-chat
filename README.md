@@ -22,32 +22,28 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
 ## Installation
-
-```bash
-$ npm install
-```
+1. Clone the repository to your local machine.
+2. Open a terminal or command prompt and navigate to the root directory of the project.
+3. Copy the env.example file to .env:
+4. Update the values in the .env file as necessary to match your environment.
+5. Make sure to save the changes to the .env file.
 
 ## Running the app
 
-```bash
-# development
-$ npm run start
+To start the app, follow these steps:
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
+- Open a terminal or command prompt and navigate to the directory containing your docker-compose.yml file.
+- Run the command docker-compose up to start the app and its dependencies.
+- Wait for the containers to start and the app to be ready. You should see some output in the terminal indicating the progress of the startup process.
+- Once the app is running, you can access it by opening a web browser and navigating to the URL http://localhost:8000.
 
 ## Test
 
 ```bash
+# first ,install dependencies locally
+$ npm install
+
 # unit tests
 $ npm run test
 
@@ -58,15 +54,21 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Support
+## using the APIs
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+To test the API ,follow the following instruction:
+Ps: Get the  OpenAPI documentation and  payload details from {{api}}/api after running the app
+- Fetch userID GET: {{api}}/user
+- Create the first room POST: {{api}}/room
+- Add user to the room POST: {{api}}room/roomId/users/userId
+- Send message to the room POST: {{api}}/room/roomId/messages
+- fetch latest room messages GET: {{api}}/room/roomId/messages
+
 
 ## Stay in touch
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- Author - [Bryan Toromo]
+
 
 ## License
 
