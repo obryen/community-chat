@@ -23,7 +23,7 @@ export class RoomController {
   }
 
   @Post(':roomId/messages')
-  async sendMessageToRoom(@Param('roomId') roomId: string, @Body() sendMessageDto: SendMessageDto) {
+  async sendMessageToRoom(@Param('roomId') roomId: string, @Body() sendMessageDto: SendMessageDto): Promise<{ id: string }> {
     const message = await this.chatService.sendMessageToRoom(roomId, sendMessageDto.userId, sendMessageDto.text);
     return { id: message.id };
   }
